@@ -1,4 +1,4 @@
-package com.viktor_zet.beatbox_p5
+package com.viktor_zet.beatbox_p5.model
 
 private const val WAV = ".wav"
 
