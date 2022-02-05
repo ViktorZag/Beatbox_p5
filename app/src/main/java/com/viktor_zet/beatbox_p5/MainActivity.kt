@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.viktor_zet.beatbox_p5.databinding.ActivityMainBinding
 import com.viktor_zet.beatbox_p5.databinding.ListItemSoundBinding
+import com.viktor_zet.beatbox_p5.model.Sound
+import com.viktor_zet.beatbox_p5.view_model.SoundViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +32,17 @@ class MainActivity : AppCompatActivity() {
     private inner class SoundHolder(private val binding: ListItemSoundBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.viewModel = SoundViewModel(beatBox)
+        }
+
+        fun bind(sound: Sound) {
+            binding.apply {
+                viewModel?.sound = sound
+                executePendingBindings()
+            }
+        }
+
     }
 
     private inner class SoundAdapter(private val sounds: List<Sound>) :
@@ -46,9 +59,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: SoundHolder, position: Int) {
-
+            val sound = sounds[position]
+            holder.bind(sound)
         }
 
         override fun getItemCount() = sounds.size
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        beatBox.release()
     }
 }
